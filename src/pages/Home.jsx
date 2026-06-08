@@ -1,12 +1,45 @@
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import horrorImg from '../../horror.jpg'
 import movieImg from '../../movie.jpg'
 import detectiveImg from '../../detective.jpg'
+import homeMusic from '../../home.mp3'
 
 export default function Home() {
+  const navigate = useNavigate()
+  const audioRef = useRef(null)
+  const [showMusicBtn, setShowMusicBtn] = useState(true)
 
-const navigate = useNavigate()
+  useEffect(() => {
+    const audio = new Audio(homeMusic)
+    audio.loop = true
+    audio.volume = 0.25
+    audioRef.current = audio
+
+    const startMusic = () => {
+      audio.play().catch(() => {
+        // Autoplay blocked; will retry on next interaction
+      })
+    }
+
+    window.addEventListener('click', startMusic, { once: true })
+
+    return () => {
+      window.removeEventListener('click', startMusic)
+      audio.pause()
+      audio.currentTime = 0
+    }
+  }, [])
+
+  const handleMusicClick = () => {
+    if (!audioRef.current) return
+    audioRef.current.play().then(() => {
+      setShowMusicBtn(false)
+    }).catch(() => {
+      // Playback failed, keep button visible
+    })
+  }
 
 return ( <div className="min-h-screen px-4 pt-4 pb-10">
 
@@ -123,6 +156,15 @@ return ( <div className="min-h-screen px-4 pt-4 pb-10">
     </div>
 
   </div>
+
+  {showMusicBtn && (
+    <button
+      onClick={handleMusicClick}
+      className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-xl bg-white/10 px-4 py-3 text-sm font-semibold text-white backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.4)] ring-1 ring-white/20 transition-all duration-200 active:scale-95 hover:bg-white/20"
+ theological>
+      🔊 Включить атмосферу
+    </button>
+  )}
 
 </div>
 
