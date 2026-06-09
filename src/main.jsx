@@ -16,6 +16,7 @@ import MovieDetails from './pages/MovieDetails'
 import Search from './pages/Search'
 import Actor from './pages/Actor'
 import Favorites from './pages/Favorites'
+import CollectionPage from './pages/CollectionPage'
 import MainLayout from './components/MainLayout'
 import ScrollToTop from './components/ScrollToTop'
 
@@ -36,6 +37,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
           <Route path="/thriller" element={<Movie />} />
           <Route path="/movie/:id" element={<MovieDetails />} />
           <Route path="/scifi" element={<Detective />} />
+          <Route path="/collection/:type"element={<CollectionPage />} />
           <Route path="/favorites" element={<Favorites />} />
         </Route>
 

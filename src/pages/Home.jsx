@@ -3,12 +3,15 @@ import { useNavigate } from 'react-router-dom'
 import horrorImg from '../../horror.jpg'
 import movieImg from '../../movie.jpg'
 import detectiveImg from '../../detective.jpg'
+
 import BottomNavigation from '../components/BottomNavigation'
 
 export default function Home() {
+
   const navigate = useNavigate()
 
   return (
+
     <div className="min-h-screen px-4 pt-4 pb-10">
 
       {/* HEADER */}
@@ -16,20 +19,24 @@ export default function Home() {
       <div className="mb-7 relative">
 
         <div className="glitch-wrapper">
+
           <h1
             className="glitch-text text-white text-[42px] font-black tracking-[-2px]"
             data-text="BLACKROOM"
           >
             BLACKROOM
           </h1>
+
         </div>
 
-        {/* Search Button */}
+        {/* SEARCH BUTTON */}
+
         <button
           onClick={() => navigate('/search')}
           className="absolute right-0 top-0 flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.4)] ring-1 ring-white/20 transition-all duration-200 active:scale-95 hover:bg-white/20"
           aria-label="Поиск"
         >
+
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
@@ -41,10 +48,55 @@ export default function Home() {
             strokeLinecap="round"
             strokeLinejoin="round"
           >
+
             <circle cx="11" cy="11" r="8" />
             <path d="m21 21-4.3-4.3" />
+
           </svg>
+
         </button>
+
+      </div>
+
+      {/* COLLECTIONS */}
+
+      <div className="mb-7">
+
+        <h2 className="mb-4 text-2xl font-black text-white">
+          ✨ Подборки
+        </h2>
+
+        <div className="flex gap-3 overflow-x-auto pb-2">
+
+          <button
+            onClick={() => navigate('/collection/trending')}
+            className="shrink-0 rounded-2xl bg-orange-500 px-5 py-3 text-sm font-bold text-white shadow-[0_10px_30px_rgba(249,115,22,0.35)]"
+          >
+            🔥 Сейчас смотрят
+          </button>
+
+          <button
+            onClick={() => navigate('/collection/popular')}
+            className="shrink-0 rounded-2xl bg-blue-500 px-5 py-3 text-sm font-bold text-white shadow-[0_10px_30px_rgba(59,130,246,0.35)]"
+          >
+            ⭐ Популярное
+          </button>
+
+          <button
+            onClick={() => navigate('/collection/top')}
+            className="shrink-0 rounded-2xl bg-purple-500 px-5 py-3 text-sm font-bold text-white shadow-[0_10px_30px_rgba(168,85,247,0.35)]"
+          >
+            👑 Топ рейтинга
+          </button>
+
+          <button
+            onClick={() => navigate('/collection/upcoming')}
+            className="shrink-0 rounded-2xl bg-pink-500 px-5 py-3 text-sm font-bold text-white shadow-[0_10px_30px_rgba(236,72,153,0.35)]"
+          >
+            🎬 Скоро выйдут
+          </button>
+
+        </div>
 
       </div>
 
@@ -135,5 +187,7 @@ export default function Home() {
       <BottomNavigation />
 
     </div>
+
   )
+
 }
