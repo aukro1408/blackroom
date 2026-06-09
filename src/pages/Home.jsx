@@ -1,172 +1,139 @@
-import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import horrorImg from '../../horror.jpg'
 import movieImg from '../../movie.jpg'
 import detectiveImg from '../../detective.jpg'
-import homeMusic from '../../home.mp3'
+import BottomNavigation from '../components/BottomNavigation'
 
 export default function Home() {
   const navigate = useNavigate()
-  const audioRef = useRef(null)
-  const [showMusicBtn, setShowMusicBtn] = useState(true)
 
-  useEffect(() => {
-    const audio = new Audio(homeMusic)
-    audio.loop = true
-    audio.volume = 0.25
-    audioRef.current = audio
+  return (
+    <div className="min-h-screen px-4 pt-4 pb-10">
 
-    const startMusic = () => {
-      audio.play().catch(() => {
-        // Autoplay blocked; will retry on next interaction
-      })
-    }
+      {/* HEADER */}
 
-    window.addEventListener('click', startMusic, { once: true })
+      <div className="mb-7 relative">
 
-    return () => {
-      window.removeEventListener('click', startMusic)
-      audio.pause()
-      audio.currentTime = 0
-    }
-  }, [])
+        <div className="glitch-wrapper">
+          <h1
+            className="glitch-text text-white text-[42px] font-black tracking-[-2px]"
+            data-text="BLACKROOM"
+          >
+            BLACKROOM
+          </h1>
+        </div>
 
-  const handleMusicClick = () => {
-    if (!audioRef.current) return
-    audioRef.current.play().then(() => {
-      setShowMusicBtn(false)
-    }).catch(() => {
-      // Playback failed, keep button visible
-    })
-  }
+        {/* Search Button */}
+        <button
+          onClick={() => navigate('/search')}
+          className="absolute right-0 top-0 flex h-11 w-11 items-center justify-center rounded-2xl bg-white/10 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.4)] ring-1 ring-white/20 transition-all duration-200 active:scale-95 hover:bg-white/20"
+          aria-label="Поиск"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="white"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.3-4.3" />
+          </svg>
+        </button>
 
-return ( <div className="min-h-screen px-4 pt-4 pb-10">
+      </div>
 
-```
-  {/* HEADER */}
+      {/* CARD 1 */}
 
-  <div className="mb-7">
+      <div
+        onClick={() => navigate('/horror')}
+        className="relative mb-5 h-[240px] overflow-hidden rounded-[36px] shadow-[0_20px_60px_rgba(0,0,0,0.45)] transition-all duration-200 active:scale-[0.98]"
+      >
 
-    <h1 className="text-white text-[42px] font-black tracking-[-2px]">
-      BLACKROOM
-    </h1>
+        <img
+          src={horrorImg}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
 
-    <p className="mt-1 text-sm text-slate-200">
-      ИИ создаёт истории. Ты выбираешь путь.
-    </p>
+        <div className="absolute inset-0 bg-black/40" />
 
-  </div>
+        <div className="relative z-10 flex h-full flex-col justify-end p-5">
 
-  {/* CARD 1 */}
+          <h2 className="text-[38px] font-black leading-none text-white">
+            УЖАСЫ
+          </h2>
 
-  <div
-    onClick={() => navigate('/horror')}
-    className="relative mb-5 h-[240px] overflow-hidden rounded-[36px] shadow-[0_20px_60px_rgba(0,0,0,0.45)] transition-all duration-200 active:scale-[0.98]"
-  >
+          <button className="mt-4 w-fit rounded-2xl bg-red-500 px-5 py-3 text-sm font-bold text-white">
+            Смотреть
+          </button>
 
-    <img
-      src={horrorImg}
-      className="absolute inset-0 h-full w-full object-cover"
-    />
+        </div>
 
-    <div className="absolute inset-0 bg-black/40" />
+      </div>
 
-    <div className="relative z-10 flex h-full flex-col justify-end p-5">
+      {/* CARD 2 */}
 
-      <h2 className="text-[38px] font-black leading-none text-white">
-        УЖАСЫ
-      </h2>
+      <div
+        onClick={() => navigate('/thriller')}
+        className="relative mb-5 h-[240px] overflow-hidden rounded-[36px] shadow-[0_20px_60px_rgba(0,0,0,0.45)] transition-all duration-200 active:scale-[0.98]"
+      >
 
-      <p className="mt-3 max-w-[240px] text-sm leading-6 text-slate-200">
-        Погрузись в страшные истории,
-        где каждое решение имеет последствия.
-      </p>
+        <img
+          src={movieImg}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
 
-      <button className="mt-4 w-fit rounded-2xl bg-red-500 px-5 py-3 text-sm font-bold text-white">
-        Играть
-      </button>
+        <div className="absolute inset-0 bg-black/30" />
 
-    </div>
+        <div className="relative z-10 flex h-full flex-col justify-end p-5">
 
-  </div>
+          <h2 className="text-[34px] font-black leading-none text-white">
+            ТРИЛЛЕРЫ
+          </h2>
 
-  {/* CARD 2 */}
+          <button className="mt-4 w-fit rounded-2xl bg-yellow-400 px-5 py-3 text-sm font-bold text-black">
+            Смотреть
+          </button>
 
-  <div
-    onClick={() => navigate('/movie')}
-    className="relative mb-5 h-[240px] overflow-hidden rounded-[36px] shadow-[0_20px_60px_rgba(0,0,0,0.45)] transition-all duration-200 active:scale-[0.98]"
-  >
+        </div>
 
-    <img
-      src={movieImg}
-      className="absolute inset-0 h-full w-full object-cover"
-    />
+      </div>
 
-    <div className="absolute inset-0 bg-black/30" />
+      {/* CARD 3 */}
 
-    <div className="relative z-10 flex h-full flex-col justify-end p-5">
+      <div
+        onClick={() => navigate('/scifi')}
+        className="relative h-[240px] overflow-hidden rounded-[36px] shadow-[0_20px_60px_rgba(0,0,0,0.45)] transition-all duration-200 active:scale-[0.98]"
+      >
 
-      <h2 className="text-[34px] font-black leading-none text-white">
-        УГАДАЙ ФИЛЬМ
-      </h2>
+        <img
+          src={detectiveImg}
+          className="absolute inset-0 h-full w-full object-cover"
+        />
 
-      <p className="mt-3 max-w-[240px] text-sm leading-6 text-slate-200">
-        Угадай фильм по кадру,
-        описанию или эмодзи.
-      </p>
+        <div className="absolute inset-0 bg-black/45" />
 
-      <button className="mt-4 w-fit rounded-2xl bg-yellow-400 px-5 py-3 text-sm font-bold text-black">
-        Начать
-      </button>
+        <div className="relative z-10 flex h-full flex-col justify-end p-5">
 
-    </div>
+          <h2 className="text-[32px] font-black leading-none text-white">
+            ФАНТАСТИКА
+          </h2>
 
-  </div>
+          <button className="mt-4 w-fit rounded-2xl bg-cyan-400 px-5 py-3 text-sm font-bold text-black">
+            Смотреть
+          </button>
 
-  {/* CARD 3 */}
+        </div>
 
-  <div
-    onClick={() => navigate('/detective')}
-    className="relative h-[240px] overflow-hidden rounded-[36px] shadow-[0_20px_60px_rgba(0,0,0,0.45)] transition-all duration-200 active:scale-[0.98]"
-  >
+      </div>
 
-    <img
-      src={detectiveImg}
-      className="absolute inset-0 h-full w-full object-cover"
-    />
-
-    <div className="absolute inset-0 bg-black/45" />
-
-    <div className="relative z-10 flex h-full flex-col justify-end p-5">
-
-      <h2 className="text-[32px] font-black leading-none text-white">
-        РАССЛЕДОВАНИЕ
-      </h2>
-
-      <p className="mt-3 max-w-[240px] text-sm leading-6 text-slate-200">
-        Допрашивай подозреваемых,
-        собирай улики и находи истину.
-      </p>
-
-      <button className="mt-4 w-fit rounded-2xl bg-cyan-400 px-5 py-3 text-sm font-bold text-black">
-        Расследовать
-      </button>
+      <BottomNavigation />
 
     </div>
-
-  </div>
-
-  {showMusicBtn && (
-    <button
-      onClick={handleMusicClick}
-      className="fixed bottom-6 right-6 z-50 flex items-center gap-2 rounded-xl bg-white/10 px-4 py-3 text-sm font-semibold text-white backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.4)] ring-1 ring-white/20 transition-all duration-200 active:scale-95 hover:bg-white/20"
- theological>
-      🔊 Включить атмосферу
-    </button>
-  )}
-
-</div>
-
-)
+  )
 }

@@ -1,59 +1,136 @@
-import detectiveImg from '../../detective.jpg'
+import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 export default function Detective() {
 
-return (
-<div className="relative min-h-screen overflow-hidden">
+  const navigate = useNavigate()
 
-  <img
-    src={detectiveImg}
-    className="absolute inset-0 h-full w-full object-cover"
-  />
+  const [movies, setMovies] = useState([])
+  const [page, setPage] = useState(1)
+  const [loading, setLoading] = useState(false)
 
-  <div className="absolute inset-0 bg-black/70" />
+  useEffect(() => {
+    loadMovies(page)
+  }, [page])
 
-  <div className="relative z-10 flex min-h-screen flex-col justify-end p-5">
+  const loadMovies = async (currentPage) => {
 
-    <div className="rounded-[34px] bg-white/10 p-5 backdrop-blur-xl shadow-[0_20px_80px_rgba(0,0,0,0.45)]">
+    if (loading) return
 
-      <p className="text-sm text-cyan-300">
-        Дело №148
-      </p>
+    setLoading(true)
 
-      <h1 className="mt-2 text-3xl font-black text-white">
-        ПРОПАВШИЙ СВИДЕТЕЛЬ
-      </h1>
+    try {
 
-      <p className="mt-4 leading-7 text-slate-200">
-        Единственный свидетель
-        по делу исчез за день
-        до суда.
+      const response = await fetch(
+        `https://api.themoviedb.org/3/discover/movie?with_genres=878&language=ru-RU&page=${currentPage}`,
+        {
+          headers: {
+            Authorization:
+              'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI1OGU2ZmI2NmI5MWFhOGYwZTFmMmI4Y2YzYmIxMzQyZSIsIm5iZiI6MTY1MDM2NDc2NS43NDMsInN1YiI6IjYyNWU5MTVkMmQzNzIxMTViMTAzZTk1ZiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.cqdQjwctMj2HWwkEDD6f7-TV-g0sEv2aeULnKa8cLFY'
+          }
+        }
+      )
 
-        На его столе найден
-        только странный ключ.
-      </p>
+      const data = await response.json()
 
-      <div className="mt-6 flex flex-col gap-3">
+      setMovies((prev) => [...prev, ...data.results])
 
-        <button className="rounded-2xl bg-white/10 p-4 text-left text-white backdrop-blur-xl">
-          Осмотреть квартиру
-        </button>
+    } catch (error) {
 
-        <button className="rounded-2xl bg-white/10 p-4 text-left text-white backdrop-blur-xl">
-          Допросить соседей
-        </button>
+      console.error(error)
 
-        <button className="rounded-2xl bg-cyan-400 p-4 text-left font-bold text-black">
-          Изучить ключ
-        </button>
+    } finally {
+
+      setLoading(false)
+
+    }
+
+  }
+
+  useEffect(() => {
+
+    const handleScroll = () => {
+
+      const scrollTop = window.scrollY
+      const windowHeight = window.innerHeight
+      const documentHeight = document.documentElement.scrollHeight
+
+      if (scrollTop + windowHeight + 300 >= documentHeight && !loading) {
+        setPage((prev) => prev + 1)
+      }
+
+    }
+
+    window.addEventListener('scroll', handleScroll)
+
+    return () => window.removeEventListener('scroll', handleScroll)
+
+  }, [loading])
+
+  return (
+
+    <div className="min-h-screen px-4 pt-6 pb-24">
+
+      {/* HEADER */}
+
+      <div className="mb-6">
+
+        <h1 className="text-[38px] font-black tracking-[-2px] text-white">
+          ФАНТАСТИКА
+        </h1>
+
+        <p className="mt-1 text-sm text-slate-200">
+          Космос, технологии и миры будущего.
+        </p>
+
+      </div>
+
+      {/* MOVIES GRID */}
+
+      <div className="grid grid-cols-2 gap-4">
+
+        {movies.map((movie) => (
+
+          <div
+            key={movie.id}
+            onClick={() => navigate(`/movie/${movie.id}`)}
+            className="overflow-hidden rounded-[28px] bg-white/5 backdrop-blur-md shadow-[0_10px_40px_rgba(0,0,0,0.35)] transition-all duration-200 active:scale-[0.97]"
+          >
+
+            {/* POSTER */}
+
+            <div className="relative h-[230px] overflow-hidden">
+
+              <img
+                src={`https://image.tmdb.org/t/p/w342${movie.poster_path}`}
+                className="h-full w-full object-cover"
+              />
+
+              <div className="absolute inset-0 bg-black/20" />
+
+            </div>
+
+            {/* INFO */}
+
+            <div className="p-3">
+
+              <h2 className="line-clamp-1 text-sm font-bold text-white">
+                {movie.title}
+              </h2>
+
+              <p className="mt-1 text-xs text-cyan-300">
+                ⭐ {movie.vote_average?.toFixed(1)}
+              </p>
+
+            </div>
+
+          </div>
+
+        ))}
 
       </div>
 
     </div>
 
-  </div>
-
-</div>
-
-)
+  )
 }
