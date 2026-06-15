@@ -7,6 +7,8 @@ export default function CollectionPage() {
   const { type } = useParams()
 
   const [movies, setMovies] = useState([])
+  const [page, setPage] = useState(1)
+  const [loading, setLoading] = useState(false)
 
   const collections = {
     trending: {
@@ -34,11 +36,11 @@ export default function CollectionPage() {
 
   useEffect(() => {
 
-    loadMovies()
+    loadMovies(page)
 
-  }, [type])
+  }, [page, type])
 
-  const loadMovies = async () => {
+  const loadMovies = async (currentPage) => {
 
     if (!currentCollection) return
 
@@ -47,7 +49,7 @@ export default function CollectionPage() {
       const url =
         'https://api.themoviedb.org/3' +
         currentCollection.endpoint +
-        '?language=ru-RU&page=1'
+        '?language=ru-RU&page=' + currentPage
 
       const response = await fetch(url, {
         headers: {
@@ -58,7 +60,10 @@ export default function CollectionPage() {
 
       const data = await response.json()
 
-      setMovies(data.results || [])
+      setMovies((prev) => [
+  ...prev,
+  ...(data.results || [])
+])
 
     } catch (error) {
 
@@ -68,7 +73,41 @@ export default function CollectionPage() {
 
   }
 
-  if (!currentCollection) {
+useEffect(() => {
+
+  const handleScroll = () => {
+
+    const scrollTop = window.scrollY
+    const windowHeight = window.innerHeight
+    const documentHeight =
+      document.documentElement.scrollHeight
+
+    if (
+      scrollTop + windowHeight + 300 >=
+      documentHeight &&
+      !loading
+    ) {
+
+      setPage((prev) => prev + 1)
+
+    }
+
+  }
+
+  window.addEventListener(
+    'scroll',
+    handleScroll
+  )
+
+  return () =>
+    window.removeEventListener(
+      'scroll',
+      handleScroll
+    )
+
+}, [loading])
+  
+if (!currentCollection) {
 
     return (
       <div className="p-6 text-white">

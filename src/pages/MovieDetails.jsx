@@ -210,6 +210,16 @@ export default function MovieDetails() {
             {movie.overview}
           </p>
 
+          {/* WATCH BUTTON */}
+          <div className="mt-6">
+            <button
+              onClick={() => navigate(`/watch/${encodeURIComponent(movie.title)}`)}
+              className="w-full rounded-xl bg-red-600 py-4 text-lg font-bold text-white transition-all duration-200 active:scale-95"
+            >
+              ▶ Смотреть
+            </button>
+          </div>
+
           {/* DIRECTOR */}
           {director && (
             <div className="mt-6">
